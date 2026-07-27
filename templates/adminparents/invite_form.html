@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Send invite — BabyCal{% endblock %}
+{% block content %}
+<h1>Send invite</h1>
+<p class="muted">v1 note: this logs the text instead of actually sending it (no SMS provider configured yet).</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Create invite</button>
+</form>
+{% endblock %}

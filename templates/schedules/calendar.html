@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Calendar — BabyCal{% endblock %}
+{% block content %}
+
+{% if not schedule %}
+<div class="card">
+    <h1>No schedule yet</h1>
+    <p>You're not on any schedule yet. Ask a parent to add you to one.</p>
+</div>
+{% else %}
+
+<div class="calendar-header">
+    <h1>{{ schedule.name }}</h1>
+    <p class="muted">{{ schedule.start_date }} – {{ schedule.end_date }}</p>
+    {% if available_schedules.count > 1 %}
+    <form method="get" class="inline-form">
+        <label for="schedule-switch" class="sr-only">Switch schedule</label>
+        <select id="schedule-switch" onchange="window.location.href=this.value">
+            {% for s in available_schedules %}
+            <option value="{% url 'schedules:calendar_for' s.id %}" {% if s.id == schedule.id %}selected{% endif %}>
+                {{ s.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+    {% endif %}
+</div>
+
+<div class="calendar-grid">
+    {% for day in days %}
+    <div class="day-cell {% if day.date in my_claims %}day-cell-mine{% endif %}">
+        <div class="day-date">{{ day.date|date:"D, M j" }}</div>
+
+        {% if day.claims %}
+        <ul class="day-claims">
+            {% for claim in day.claims %}
+            <li class="claim {% if claim.user_id == request.user.id %}claim-mine{% endif %}">
+                <span class="claim-name">{{ claim.user.name }}</span>
+                {% if claim.note %}<span class="claim-note">— {{ claim.note }}</span>{% endif %}
+                {% if claim.user_id == request.user.id %}
+                <form method="post" action="{% url 'schedules:unclaim_day' schedule.id day.date|date:'Y-m-d' %}" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-link">remove</button>
+                </form>
+                {% elif user.is_parent %}
+                <form method="post" action="{% url 'schedules:remove_claim' schedule.id claim.id %}" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-link">remove</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="day-empty muted">No one yet</p>
+        {% endif %}
+
+        {% if day.date not in my_claims %}
+        <form method="post" action="{% url 'schedules:claim_day' schedule.id day.date|date:'Y-m-d' %}" class="claim-form">
+            {% csrf_token %}
+            <input type="text" name="note" maxlength="280" placeholder="Note (optional)">
+            <button type="submit" class="btn btn-small">I'll feed them</button>
+        </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+{% endif %}
+{% endblock %}

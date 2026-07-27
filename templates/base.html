@@ -1,0 +1,36 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}BabyCal{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{% url 'schedules:calendar' %}">🐱 BabyCal</a>
+        {% if user.is_authenticated %}
+        <nav class="site-nav">
+            <a href="{% url 'schedules:calendar' %}">Calendar</a>
+            <a href="{% url 'schedules:schedule_list' %}">Schedules</a>
+            <a href="{% url 'helppage:view' %}">Help</a>
+            {% if user.is_parent %}
+            <a href="{% url 'adminparents:dashboard' %}">Parents Admin</a>
+            {% endif %}
+            <a href="{% url 'accounts:logout' %}">Log out ({{ user.name }})</a>
+        </nav>
+        {% endif %}
+    </header>
+
+    <main class="site-main">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="message {{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

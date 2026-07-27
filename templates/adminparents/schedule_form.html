@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{% if is_new %}New{% else %}Edit{% endif %} schedule — BabyCal{% endblock %}
+{% block content %}
+<h1>{% if is_new %}New schedule{% else %}Edit {{ target.name }}{% endif %}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}

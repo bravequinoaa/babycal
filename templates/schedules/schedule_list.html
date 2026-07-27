@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Schedules — BabyCal{% endblock %}
+{% block content %}
+<h1>Schedules</h1>
+<ul class="plain-list">
+    {% for schedule in schedules %}
+    <li class="card">
+        <a href="{% url 'schedules:calendar_for' schedule.id %}">{{ schedule.name }}</a>
+        <span class="muted">{{ schedule.start_date }} – {{ schedule.end_date }}</span>
+        {% if schedule.is_active %}<span class="badge">active</span>{% endif %}
+    </li>
+    {% empty %}
+    <li>No schedules yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

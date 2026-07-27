@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Parents Admin — BabyCal{% endblock %}
+{% block content %}
+<h1>Parents Admin</h1>
+<div class="dashboard-tiles">
+    <a class="card" href="{% url 'adminparents:users' %}">
+        <h2>Users</h2>
+        <p>{{ fam_count }} fam member(s), {{ pending_invite_count }} pending invite(s)</p>
+    </a>
+    <a class="card" href="{% url 'adminparents:schedules' %}">
+        <h2>Schedules</h2>
+        <p>{{ schedule_count }} schedule(s)</p>
+    </a>
+    <a class="card" href="{% url 'helppage:edit' %}">
+        <h2>Help page</h2>
+        <p>Edit title, links, photos, contact info</p>
+    </a>
+</div>
+{% endblock %}

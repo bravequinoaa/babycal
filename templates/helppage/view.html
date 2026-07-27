@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Help — BabyCal{% endblock %}
+{% block content %}
+<div class="card">
+    <h1>{{ help_page.title }}</h1>
+    <div class="rich-text">{{ help_page.body|safe }}</div>
+
+    {% if help_page.links.all %}
+    <h2>Links</h2>
+    <ul class="plain-list">
+        {% for link in help_page.links.all %}
+        <li><a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if help_page.photos.all %}
+    <h2>Photos</h2>
+    <div class="photo-grid">
+        {% for photo in help_page.photos.all %}
+        <figure>
+            <img src="{{ photo.image.url }}" alt="{{ photo.caption }}">
+            {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
+        </figure>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if help_page.contact_info %}
+    <h2>Contact</h2>
+    <p>{{ help_page.contact_info }}</p>
+    {% endif %}
+
+    {% if user.is_parent %}
+    <p><a href="{% url 'helppage:edit' %}" class="btn">Edit this page</a></p>
+    {% endif %}
+</div>
+{% endblock %}

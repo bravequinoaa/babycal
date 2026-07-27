@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Verify code — BabyCal{% endblock %}
+{% block content %}
+<div class="card card-narrow">
+    <h1>Enter your code</h1>
+    <p>We sent a verification code to {{ phone }}.</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <label for="id_code">Verification code</label>
+        {{ form.code }}
+        {% for error in form.code.errors %}
+        <p class="field-error">{{ error }}</p>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Verify</button>
+    </form>
+</div>
+{% endblock %}

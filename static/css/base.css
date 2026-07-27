@@ -1,0 +1,217 @@
+:root {
+    --color-bg: #faf7f2;
+    --color-surface: #ffffff;
+    --color-text: #2b2420;
+    --color-muted: #766a5e;
+    --color-border: #e6ddd2;
+    --color-primary: #c9752f;
+    --color-primary-dark: #a85f22;
+    --color-mine: #fff3e0;
+    --radius: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #1c1815;
+        --color-surface: #262019;
+        --color-text: #f1e9df;
+        --color-muted: #b3a495;
+        --color-border: #3a322a;
+        --color-primary: #e08a3e;
+        --color-primary-dark: #f0a35f;
+        --color-mine: #3a2b17;
+    }
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+.site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    gap: 0.5rem;
+}
+
+.brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+.site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.site-nav a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.site-nav a:hover { color: var(--color-primary); }
+
+.site-main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.card-narrow { max-width: 380px; margin: 2rem auto; }
+
+.muted { color: var(--color-muted); font-size: 0.9rem; }
+
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    background: var(--color-primary);
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.btn:hover { background: var(--color-primary-dark); }
+.btn-primary { background: var(--color-primary); }
+.btn-small { padding: 0.3rem 0.6rem; font-size: 0.85rem; }
+.btn-link {
+    background: none; border: none; color: var(--color-primary);
+    text-decoration: underline; cursor: pointer; padding: 0; font-size: 0.85rem;
+}
+
+input[type="text"], input[type="tel"], input[type="url"], input[type="email"],
+input[type="date"], input[type="password"], input[type="file"], textarea, select {
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+form p { margin: 0.4rem 0; }
+
+.inline-form { display: inline; margin: 0; }
+
+.field-error { color: #c0392b; font-size: 0.85rem; margin: 0 0 0.5rem; }
+
+.messages { list-style: none; padding: 0; }
+.messages .message {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    background: var(--color-mine);
+}
+
+.plain-list { list-style: none; padding: 0; }
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-surface);
+    font-size: 0.9rem;
+}
+
+.data-table th, .data-table td {
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.dashboard-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.calendar-header { margin-bottom: 1rem; }
+
+.badge {
+    display: inline-block;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    font-size: 0.75rem;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+}
+.photo-grid img { width: 100%; border-radius: var(--radius); }
+
+/* Calendar: month-grid on desktop, scrollable day-list on mobile (SPEC.md section 6). */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+@media (max-width: 700px) {
+    .calendar-grid {
+        grid-template-columns: 1fr;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    .site-nav { font-size: 0.85rem; }
+}
+
+.day-cell {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.day-cell-mine { border-color: var(--color-primary); }
+
+.day-date { font-weight: 600; font-size: 0.85rem; }
+
+.day-claims { list-style: none; margin: 0; padding: 0; font-size: 0.85rem; }
+.claim { display: flex; gap: 0.35rem; align-items: baseline; flex-wrap: wrap; }
+.claim-mine .claim-name { color: var(--color-primary-dark); }
+.claim-note { color: var(--color-muted); font-style: italic; }
+
+.day-empty { margin: 0; }
+
+.claim-form { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.claim-form input { flex: 1; min-width: 0; margin-bottom: 0; }
+
+.sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}

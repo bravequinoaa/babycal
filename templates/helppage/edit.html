@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Edit help page — BabyCal{% endblock %}
+{% block content %}
+<h1>Edit help page</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <h2>Links</h2>
+    {{ link_formset.management_form }}
+    {% for link_form in link_formset %}
+    <div class="formset-row">{{ link_form.as_p }}</div>
+    {% endfor %}
+
+    <h2>Photos</h2>
+    {{ photo_formset.management_form }}
+    {% for photo_form in photo_formset %}
+    <div class="formset-row">{{ photo_form.as_p }}</div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}
