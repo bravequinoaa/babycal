@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -7,14 +9,18 @@ from .forms import OTPVerifyForm, PhoneLoginForm
 from .models import LoginOTP, User
 from .services import start_login
 
+logger = logging.getLogger(__name__)
+
 SESSION_PENDING_PHONE = "pending_login_phone"
 
 
 def _log_user_in(request, phone):
     user = authenticate(request, phone=phone)
     if user is None:
+        logger.warning("authenticate() returned None for phone=%s (user missing or inactive at auth time)", phone)
         return False
     login(request, user)
+    logger.info("login succeeded for phone=%s user_id=%s role=%s", phone, user.pk, user.role)
     return True
 
 
@@ -27,6 +33,7 @@ def login_view(request):
     if request.method == "POST" and form.is_valid():
         phone = form.cleaned_data["phone"]
         if not User.objects.filter(phone=phone, is_active=True).exists():
+            logger.warning("login rejected: no active user found for normalized phone=%s", phone)
             form.add_error("phone", "That number hasn't been invited yet.")
         else:
             otp = start_login(phone)

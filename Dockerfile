@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN mkdir -p /app/staticfiles /app/media \
+RUN mkdir -p /app/staticfiles /app/media /app/logs \
     && chmod +x /app/docker-entrypoint.sh
 
 EXPOSE 8000

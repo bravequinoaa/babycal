@@ -29,6 +29,7 @@ services:
       # into these directories — see README.md "Behind an existing host Nginx".
       - ./staticfiles:/app/staticfiles
       - ./media:/app/media
+      - ./logs:/app/logs
     ports:
       # Bound to localhost only: reachable from a host-level reverse proxy,
       # never directly from the internet. Omit/remove this if you use the

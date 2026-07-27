@@ -37,6 +37,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "babycal.middleware.RequestLoggingMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -133,6 +134,54 @@ CKEDITOR_5_CONFIGS = {
     "default": {
         "toolbar": ["bold", "italic", "underline", "|", "bulletedList", "numberedList", "|", "link", "|", "undo", "redo"],
     }
+}
+
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {"format": "{asctime} {levelname} {name} {message}", "style": "{"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "verbose"},
+        "app_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": str(LOG_DIR / "app.log"),
+            "maxBytes": 5 * 1024 * 1024,
+            "backupCount": 5,
+            "formatter": "verbose",
+        },
+        "request_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": str(LOG_DIR / "requests.log"),
+            "maxBytes": 5 * 1024 * 1024,
+            "backupCount": 5,
+            "formatter": "verbose",
+        },
+        "django_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": str(LOG_DIR / "django.log"),
+            "maxBytes": 5 * 1024 * 1024,
+            "backupCount": 5,
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        # Django's own request/error logging (500s, security warnings, etc.)
+        "django": {"handlers": ["console", "django_file"], "level": "INFO", "propagate": False},
+        # One line per request: method, path, status, duration, logged-in user.
+        "babycal.request": {"handlers": ["console", "request_file"], "level": "INFO", "propagate": False},
+        # App-level business events (login/OTP flow, claims, sms/email stubs).
+        "accounts": {"handlers": ["console", "app_file"], "level": "INFO", "propagate": False},
+        "schedules": {"handlers": ["console", "app_file"], "level": "INFO", "propagate": False},
+        "helppage": {"handlers": ["console", "app_file"], "level": "INFO", "propagate": False},
+        "adminparents": {"handlers": ["console", "app_file"], "level": "INFO", "propagate": False},
+        "sms": {"handlers": ["console", "app_file"], "level": "INFO", "propagate": False},
+        "notifications": {"handlers": ["console", "app_file"], "level": "INFO", "propagate": False},
+    },
 }
 
 if not DEBUG:
