@@ -1,0 +1,40 @@
+# Example vhost for running BabyCal behind an EXISTING system Nginx that
+# already serves other sites on this VM (so the containerized nginx/certbot
+# services in docker-compose.yml are not used — see README.md).
+#
+# Install:
+#   sudo cp deploy/babycal-host-nginx.conf.example /etc/nginx/sites-available/babycal.conf
+#   # edit server_name and the two `alias` paths below to match this checkout's location
+#   sudo ln -s /etc/nginx/sites-available/babycal.conf /etc/nginx/sites-enabled/babycal.conf
+#   sudo nginx -t && sudo systemctl reload nginx
+#   sudo certbot --nginx -d babycal.example.com   # obtains a cert AND rewrites
+#                                                  # this file to add the TLS
+#                                                  # server block + redirect
+#
+# `web` in docker-compose.yml publishes to 127.0.0.1:8000 (not exposed
+# publicly) specifically so this host Nginx can proxy to it.
+
+server {
+    listen 80;
+    server_name babycal.example.com;
+
+    client_max_body_size 10M;
+
+    # Absolute path to this checkout's staticfiles/ and media/ directories
+    # (the same ones docker-compose.yml bind-mounts into the `web` container).
+    location /static/ {
+        alias /home/ubuntu/BabyCal/staticfiles/;
+    }
+
+    location /media/ {
+        alias /home/ubuntu/BabyCal/media/;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

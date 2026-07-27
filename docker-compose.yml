@@ -24,11 +24,26 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - static_data:/app/staticfiles
-      - media_data:/app/media
+      # Bind mounts (not named volumes) so a host-level reverse proxy (e.g. an
+      # existing system Nginx already serving other sites) can alias directly
+      # into these directories — see README.md "Behind an existing host Nginx".
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
+    ports:
+      # Bound to localhost only: reachable from a host-level reverse proxy,
+      # never directly from the internet. Omit/remove this if you use the
+      # `standalone-nginx` profile below instead (it talks to `web` over the
+      # internal compose network and doesn't need this published).
+      - "127.0.0.1:8000:8000"
 
+  # --- Optional: containerized Nginx + certbot, for a VM dedicated to BabyCal ---
+  # Not started by default (needs `--profile standalone-nginx`) because it binds
+  # host ports 80/443, which conflicts with a pre-existing system Nginx serving
+  # other sites. If that's your setup, skip this profile entirely and follow
+  # README.md's "Behind an existing host Nginx" section instead.
   nginx:
     image: nginx:alpine
+    profiles: ["standalone-nginx"]
     restart: unless-stopped
     ports:
       - "80:80"
@@ -44,8 +59,8 @@ services:
       # out of the box with no domain/certs. Switch to babycal.conf.template
       # once you have a real domain and have run the certbot bootstrap (README.md).
       - ./nginx/conf.d/babycal-bootstrap.conf.template:/etc/nginx/babycal.conf.template:ro
-      - static_data:/app/staticfiles:ro
-      - media_data:/app/media:ro
+      - ./staticfiles:/app/staticfiles:ro
+      - ./media:/app/media:ro
       - certbot_conf:/etc/letsencrypt
       - certbot_www:/var/www/certbot
     command: /bin/sh -c "rm -f /etc/nginx/conf.d/default.conf && envsubst '$$DOMAIN_NAME' < /etc/nginx/babycal.conf.template > /etc/nginx/conf.d/babycal.conf && exec nginx -g 'daemon off;'"
@@ -54,6 +69,7 @@ services:
 
   certbot:
     image: certbot/certbot
+    profiles: ["standalone-nginx"]
     volumes:
       - certbot_conf:/etc/letsencrypt
       - certbot_www:/var/www/certbot
@@ -61,7 +77,5 @@ services:
 
 volumes:
   postgres_data:
-  static_data:
-  media_data:
   certbot_conf:
   certbot_www:
