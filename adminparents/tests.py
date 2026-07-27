@@ -6,8 +6,8 @@ from accounts.models import User
 
 class ParentOnlyAccessTests(TestCase):
     def setUp(self):
-        self.parent = User.objects.create_user(phone="+15551110010", name="Parent", role=User.Role.PARENT)
-        self.fam = User.objects.create_user(phone="+15551110011", name="Fam", role=User.Role.FAM)
+        self.parent = User.objects.create_user(phone="+12125550010", name="Parent", role=User.Role.PARENT)
+        self.fam = User.objects.create_user(phone="+12125550011", name="Fam", role=User.Role.FAM)
         self.client = Client()
 
     def test_fam_is_denied_dashboard(self):

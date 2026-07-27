@@ -76,6 +76,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f"{self.name} ({self.phone})"
 
+    def save(self, *args, **kwargs):
+        if self.phone:
+            # Lazy import: services.py imports LoginOTP from this module.
+            from .services import normalize_phone
+
+            self.phone = normalize_phone(self.phone)
+        super().save(*args, **kwargs)
+
     @property
     def is_parent(self):
         return self.role == self.Role.PARENT

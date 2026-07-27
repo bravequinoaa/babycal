@@ -14,8 +14,8 @@ class ClaimUniquenessTests(TestCase):
         self.schedule = Schedule.objects.create(
             name="August trip", start_date=datetime.date(2026, 8, 1), end_date=datetime.date(2026, 8, 5)
         )
-        self.aunt = User.objects.create_user(phone="+15551110001", name="Aunt Sue", role=User.Role.FAM)
-        self.uncle = User.objects.create_user(phone="+15551110002", name="Uncle Bob", role=User.Role.FAM)
+        self.aunt = User.objects.create_user(phone="+12125550001", name="Aunt Sue", role=User.Role.FAM)
+        self.uncle = User.objects.create_user(phone="+12125550002", name="Uncle Bob", role=User.Role.FAM)
 
     def test_same_user_cannot_double_claim_a_day(self):
         Claim.objects.create(schedule=self.schedule, date=datetime.date(2026, 8, 1), user=self.aunt)
@@ -36,9 +36,9 @@ class CalendarAccessTests(TestCase):
         self.schedule = Schedule.objects.create(
             name="August trip", start_date=datetime.date(2026, 8, 1), end_date=datetime.date(2026, 8, 3)
         )
-        self.member = User.objects.create_user(phone="+15551110003", name="Member", role=User.Role.FAM)
-        self.non_member = User.objects.create_user(phone="+15551110004", name="Outsider", role=User.Role.FAM)
-        self.parent = User.objects.create_user(phone="+15551110005", name="Parent", role=User.Role.PARENT)
+        self.member = User.objects.create_user(phone="+12125550003", name="Member", role=User.Role.FAM)
+        self.non_member = User.objects.create_user(phone="+12125550004", name="Outsider", role=User.Role.FAM)
+        self.parent = User.objects.create_user(phone="+12125550005", name="Parent", role=User.Role.PARENT)
         self.schedule.members.add(self.member)
         self.client = Client()
 
@@ -59,7 +59,7 @@ class CalendarAccessTests(TestCase):
 
     def test_fam_cannot_remove_another_users_claim(self):
         claim = Claim.objects.create(schedule=self.schedule, date=datetime.date(2026, 8, 1), user=self.member)
-        other_fam = User.objects.create_user(phone="+15551110006", name="Other Fam", role=User.Role.FAM)
+        other_fam = User.objects.create_user(phone="+12125550006", name="Other Fam", role=User.Role.FAM)
         self.schedule.members.add(other_fam)
         self.client.force_login(other_fam)
         response = self.client.post(reverse("schedules:remove_claim", args=[self.schedule.id, claim.id]))
