@@ -1,9 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from accounts.decorators import parent_required
+from markdownify.templatetags.markdownify import markdownify
 
 from .forms import HelpLinkFormSet, HelpPageForm, HelpPhotoFormSet
 from .models import HelpPage
@@ -41,3 +44,10 @@ def edit_help(request):
         "link_formset": link_formset,
         "photo_formset": photo_formset,
     })
+
+
+@parent_required
+@require_POST
+def preview_help(request):
+    html = markdownify(request.POST.get("body", ""))
+    return JsonResponse({"html": html})

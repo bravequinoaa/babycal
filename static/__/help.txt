@@ -1,0 +1,19 @@
+help.txt
+
+FOOD:
+Cookie will need 1 wet meal a day. The rest of his meals get spaced throughout the day from the automatic feeder. So just make him a wet meal when you show up and he will be happy
+
+WET FOOD:
+<image> 
+tutorial: <link>
+
+LITTERBOX:
+Cookie has 3 litter boxes: the living room, the bedroom and the office. The one in the office never gets touched, but just check it. Please clean and top off the ones in the living room and bedroom.
+
+<image1> <image2> <image3> *preferably next to each other and space justfiied/normalized*
+
+TUNES:
+Cookie is classy and likes his tunes. These can be anything from snoopy jazz, minecraft music, low fi hip hop, etc. Play something on the TV through youtube. you can use the Wilmond Vano profile.
+
+PLAY:
+

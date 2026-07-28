@@ -7,4 +7,5 @@ app_name = "helppage"
 urlpatterns = [
     path("", views.view_help, name="view"),
     path("edit/", views.edit_help, name="edit"),
+    path("preview/", views.preview_help, name="preview"),
 ]
