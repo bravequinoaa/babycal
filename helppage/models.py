@@ -1,13 +1,12 @@
 from django.conf import settings
 from django.db import models
-from django_ckeditor_5.fields import CKEditor5Field
 
 
 class HelpPage(models.Model):
     """Singleton — always fetched/edited via HelpPage.get_solo()."""
 
     title = models.CharField(max_length=150, default="Help")
-    body = CKEditor5Field(blank=True, config_name="default")
+    body = models.TextField(blank=True, help_text="Markdown supported: **bold**, *italic*, [links](url), lists, etc.")
     contact_info = models.CharField(max_length=255, blank=True)
     updated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True

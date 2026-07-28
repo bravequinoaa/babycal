@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_ckeditor_5",
+    "markdownify.apps.MarkdownifyConfig",
     "accounts",
     "schedules",
     "helppage",
@@ -130,9 +130,17 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="babycal@example.com")
 
-CKEDITOR_5_CONFIGS = {
+MARKDOWNIFY = {
     "default": {
-        "toolbar": ["bold", "italic", "underline", "|", "bulletedList", "numberedList", "|", "link", "|", "undo", "redo"],
+        "WHITELIST_TAGS": [
+            "p", "br", "strong", "em", "b", "i", "u",
+            "h1", "h2", "h3", "h4",
+            "ul", "ol", "li",
+            "a", "blockquote", "code", "pre", "hr",
+        ],
+        "WHITELIST_ATTRS": ["href", "title"],
+        "WHITELIST_PROTOCOLS": ["http", "https", "mailto"],
+        "MARKDOWN_EXTENSIONS": ["extra", "sane_lists"],
     }
 }
 

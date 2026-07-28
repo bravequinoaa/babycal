@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load markdownify %}
 {% block title %}Help — BabyCal{% endblock %}
 {% block content %}
 <div class="card">
     <h1>{{ help_page.title }}</h1>
-    <div class="rich-text">{{ help_page.body|safe }}</div>
+    <div class="rich-text">{{ help_page.body|markdownify }}</div>
 
     {% if help_page.links.all %}
     <h2>Links</h2>

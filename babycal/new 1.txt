@@ -1,0 +1,5 @@
+docker compose exec web python manage.py shell -c "
+from accounts.models import User
+User.objects.create_superuser(phone='+19734891380', name='Max', password='CHANGE_ME_2', email='max@example.com')
+print([ (u.name, u.phone, u.role) for u in User.objects.all() ])
+"

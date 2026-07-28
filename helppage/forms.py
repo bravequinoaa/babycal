@@ -8,6 +8,9 @@ class HelpPageForm(forms.ModelForm):
     class Meta:
         model = HelpPage
         fields = ["title", "body", "contact_info"]
+        widgets = {
+            "body": forms.Textarea(attrs={"rows": 20, "class": "markdown-editor"}),
+        }
 
 
 HelpLinkFormSet = inlineformset_factory(
